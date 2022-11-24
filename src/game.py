@@ -23,7 +23,8 @@ class Game:
         game_controller.setup()
         
         if self.monitor_size == (0,0):
-            self.monitor_size = (pygame.display.Info().current_w-50, pygame.display.Info().current_h - 80)
+            self.monitor_size = (pygame.display.Info().current_w * 0.98, pygame.display.Info().current_h * 0.9)
+            print(self.monitor_size)
 
         self.screen = pygame.display.set_mode(self.monitor_size)
         

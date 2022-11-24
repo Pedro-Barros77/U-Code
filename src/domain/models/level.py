@@ -89,9 +89,10 @@ class Level:
             self.btn_run.draw(screen)
         
         if 'title' not in self.rendered:
-            self.rendered.append('title')  
-            title_sur = self.game.drawer.get_text_surface(self.title, colors.WHITE, 'Calibri', 50)
-            screen.blit(title_sur, (screen.get_width()/2 - title_sur.get_width()/2, 10))
+            self.rendered.append('title')
+            _title_font = pygame.font.SysFont('Calibri', 50, True)
+            title_sur = self.game.drawer.get_text_surface(self.title, colors.PASTEL_WATER_GREEN, _title_font,0)
+            screen.blit(title_sur, (screen.get_width()/2 - title_sur.get_width()/2, 30))
         
         if 'description' not in self.rendered:
             self.rendered.append('description')  
@@ -99,7 +100,7 @@ class Level:
             top = 0
             for line in lines:
                 description_sur = self.game.drawer.get_text_surface(line, colors.WHITE, 'Calibri', 30)
-                screen.blit(description_sur, (screen.get_width()/2 - description_sur.get_width()/2, self.txt_input.pos[1] - (description_sur.get_height() * len(lines)) + top))
+                screen.blit(description_sur, (screen.get_width()/2 - description_sur.get_width()/2, self.txt_input.pos[1] - (description_sur.get_height() * len(lines)) - 10 + top))
                 top += description_sur.get_height()
         
         if self.popup_box != None:
@@ -121,14 +122,17 @@ class Level:
             return condition
         self.variables_dict['check'] = check
         
+        #prefix code
         exec(self.prefix_code, self.variables_dict)
         
         try:
+            #user code
             exec(self.user_code, self.variables_dict)
         except Exception as err:
             self.popup(str(err), colors.RED, 5)
             return False
         
+        #sufix code
         exec(self.sufix_code, self.variables_dict)
         
         return self.variables_dict[self.answer_var_name] == self.expected_answer
@@ -153,15 +157,18 @@ class Level:
             
         _rect.bottom = _screen_rect.height - (_screen_rect.height * 0.05)
         _rect.right = _screen_rect.width - (_screen_rect.height * 0.05) - self.btn_run.size[0] - self.btn_run.border_width*2
-        
-        board = pygame.draw.rect(screen, self.txt_input.background_color, (_rect.topleft, _size |t_sum| self.txt_input.padding))
-        border = pygame.draw.rect(screen, self.txt_input.border_color, (_rect.topleft, _size |t_sum| self.txt_input.padding), self.txt_input.border_width)
-        screen.blit(self.txt_input.surface, _rect.topleft |t_sum| (self.txt_input.padding |t_div| (2,2)) |t_sum| (self.txt_input.border_width,self.txt_input.border_width) )
         self.txt_input.pos = _rect.topleft
         
+        #readonlt txt
         _pref_size = (_screen_rect.size[0] - _size[0] - self.txt_input.padding[0]*2 - self.txt_input.border_width*2 - self.btn_run.size[0] - self.btn_run.border_width*2 - self.btn_run.padding[0], _size[1])
         _pref_rect = pygame.Rect((_screen_rect.height * 0.05, _rect.top), _pref_size)
         pref_board = pygame.draw.rect(screen, self.prefix_txt.background_color, (_pref_rect.topleft, _pref_size |t_sum| self.prefix_txt.padding))
         pref_border = pygame.draw.rect(screen, self.prefix_txt.border_color, (_pref_rect.topleft, _pref_size |t_sum| self.prefix_txt.padding), self.prefix_txt.border_width)
         screen.blit(self.prefix_txt.surface, _pref_rect.topleft |t_sum| (self.prefix_txt.padding |t_div| (2,2)) |t_sum| (self.prefix_txt.border_width,self.prefix_txt.border_width) )
+        
+        #input txt
+        board = pygame.draw.rect(screen, self.txt_input.background_color, (_rect.topleft, _size |t_sum| self.txt_input.padding))
+        border = pygame.draw.rect(screen, self.txt_input.border_color, (_rect.topleft, _size |t_sum| self.txt_input.padding), self.txt_input.border_width)
+        screen.blit(self.txt_input.surface, _rect.topleft |t_sum| (self.txt_input.padding |t_div| (2,2)) |t_sum| (self.txt_input.border_width,self.txt_input.border_width) )
+        
         return _rect

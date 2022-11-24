@@ -16,7 +16,12 @@ class Level01(Level):
 
         var_names = ['x']
         self.variables_dict = dict([(k, locals().get(k, None)) for k in var_names])              
-        self.prefix_code = f'# Código Prefixo\nx = 0\n\n\n\n#{"-"*30}\n#{" "*5}Seu Código aqui\n#{"-"*30}\n\n'
+        self.prefix_code = f'# Código Prefixo\n'+\
+                            'x = 0'+\
+                            '\n\n\n\n'+\
+                           f'#{"="*15}\n'+\
+                           f'# Seu Código aqui <-\n'+\
+                           f'#{"="*15}\n\n'
         self.answer_var_name = 'x'
         self.expected_answer = 10
         self.sufix_code = f'\n# Código Sufixo\ncheck(x == {self.expected_answer})'
